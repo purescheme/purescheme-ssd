@@ -1,0 +1,66 @@
+name:                purescheme-ssd-wai
+version:             0.1.0.0
+github:              "purescheme/purescheme-ssd"
+license:             Apache-2.0
+author:              "Fernando Rincon Martin"
+maintainer:          "f.rincon@protonmail.com"
+copyright:           "2020 Fernando Rincon Martin"
+
+extra-source-files:
+- ../README.md
+- ../ChangeLog.md
+
+# Metadata used when publishing your package
+synopsis:            Purescheme Server Side Dom - Wai Application
+category:            Web
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on GitHub at <https://github.com/purescheme/purescheme-ssd#readme>
+
+flags:
+  development:
+    description: Used while development
+    default: False
+    manual: True
+
+when:
+- condition: flag(development)
+  dependencies:
+  - placeholders
+
+ghc-options:
+- -Wall
+
+dependencies:
+- base >= 4.7 && < 5
+- aeson
+- blaze-html
+- blaze-markup
+- containers
+- http-types
+- lrucache
+- purescheme-ssd-core
+- purescheme-wai-routing-core
+- random
+- stm
+- text
+- wai
+- wai-middleware-static
+- xml-conduit
+
+
+library:
+  source-dirs: src
+
+tests:
+  purescheme-ssd-core-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - purescheme-ssd-core

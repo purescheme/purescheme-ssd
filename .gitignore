@@ -1,0 +1,7 @@
+.stack-work/
+*~
+.vscode/
+purescheme-ssd-reflex-vaadin/purescheme-ssd-reflex-vaadin.cabal
+purescheme-ssd-reflex/purescheme-ssd-reflex.cabal
+purescheme-ssd-wai/purescheme-ssd-wai.cabal
+purescheme-ssd-core/purescheme-ssd-core.cabal

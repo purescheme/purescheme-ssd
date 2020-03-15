@@ -1,0 +1,62 @@
+name:                purescheme-ssd-reflex-vaadin
+version:             0.1.0.0
+github:              "purescheme/purescheme-ssd"
+license:             Apache-2.0
+author:              "Fernando Rincon Martin"
+maintainer:          "f.rincon@protonmail.com"
+copyright:           "2020 Fernando Rincon Martin"
+
+extra-source-files:
+- ../README.md
+- ../ChangeLog.md
+
+# Metadata used when publishing your package
+synopsis:            Purescheme Server Side Dom - Reflex Vaadin Library
+category:            Web
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on GitHub at <https://github.com/purescheme/purescheme-ssd#readme>
+
+flags:
+  development:
+    description: Used while development
+    default: False
+    manual: True
+
+when:
+- condition: flag(development)
+  dependencies:
+  - placeholders
+
+ghc-options:
+- -Wall
+
+dependencies:
+- base >= 4.7 && < 5
+- aeson
+- containers
+- data-default
+- mtl
+- purescheme-ssd-core
+- purescheme-ssd-reflex
+- reflex
+- text
+- xml-conduit
+
+library:
+  source-dirs: src
+  other-modules:
+  - Reflex.Vaadin.Widget.Internal
+
+tests:
+  purescheme-ssd-core-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - purescheme-ssd-core
