@@ -121,7 +121,9 @@ diff = getDiffBy compareNode
     compareNode el1@(Xml.NodeElement (Xml.Element name attr _)) el2@(Xml.NodeElement (Xml.Element name' attr' _)) =
       case (Map.lookup "id" attr, Map.lookup "id" attr') of
         (Just id1, Just id2) -> (name == name') && (id1 == id2)
+        (Nothing, Nothing) -> name == name'
         _ -> el1 == el2
+        
     compareNode node node' =
       node == node'
 

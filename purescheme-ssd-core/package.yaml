@@ -7,8 +7,8 @@ maintainer:          "f.rincon@protonmail.com"
 copyright:           "2020 Fernando Rincon Martin"
 
 extra-source-files:
-- ../README.md
-- ../ChangeLog.md
+- README.md
+- ChangeLog.md
 
 # Metadata used when publishing your package
 synopsis:            Purescheme Server Side Dom - Core Library

@@ -7,8 +7,8 @@ maintainer:          "f.rincon@protonmail.com"
 copyright:           "2020 Fernando Rincon Martin"
 
 extra-source-files:
-- ../README.md
-- ../ChangeLog.md
+- README.md
+- ChangeLog.md
 
 # Metadata used when publishing your package
 synopsis:            Purescheme Server Side Dom - Reflex Vaadin Library
@@ -33,6 +33,10 @@ when:
 ghc-options:
 - -Wall
 
+data-files:
+- js/dist/ssd-driver.js
+- js/dist/vaadin.js
+
 dependencies:
 - base >= 4.7 && < 5
 - aeson
@@ -50,6 +54,19 @@ library:
   other-modules:
   - Reflex.Vaadin.Widget.Internal
 
+executables:
+  purescheme-reflex-vaadin-demo:
+    source-dirs: app
+    main: Main.hs
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - purescheme-ssd-reflex-vaadin
+    - purescheme-ssd-wai
+    - warp
+
 tests:
   purescheme-ssd-core-test:
     main:                Spec.hs
@@ -59,4 +76,4 @@ tests:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - purescheme-ssd-core
+    - purescheme-ssd-reflex-vaadin
