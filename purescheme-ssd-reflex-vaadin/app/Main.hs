@@ -33,7 +33,8 @@ main = do
   run 9090 $ app (dataDir ++ "/js/dist") (mainSSDWidget demoUI) sessionStorage
 
 -- TODO This needs to be menu :: (SSDWidgetMonad t m) =>  m (Dynamic t (m ()))
-demoUI :: (SSDConstraints t m) => SSDWidget t m (Event t ())
+-- demoUI :: (SSDConstraints t m) => SSDWidget t m (Event t ())
+demoUI :: (SSDWidgetMonad t m) =>  m (Event t ())
 demoUI = do
   jsScript "vaadin.js"
   horizontalLayout def $ do
@@ -70,7 +71,6 @@ dataInput = do
           holdDyn initialGui $ leftmost
             [ fmap (const textGui) $ _button_click textButton
             ]
-
 
 textGui :: (SSDWidgetMonad t m) => m ()
 textGui = span "Text Gui"
