@@ -84,7 +84,7 @@ textField config initialState = do
           ! ssDomEventsAttribute events
           ]
         else return mempty
-  tellDyn htmlDyn
+  tellNodes htmlDyn
   return $ TextField valueDyn changeEv
   where
     events = ["change", "input"]

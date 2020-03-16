@@ -9,62 +9,83 @@ module Main where
 
 import Paths_purescheme_ssd_reflex_vaadin
 
+-- import Development.Placeholders
+
+import Prelude hiding (span)
+
 import Network.Wai.SSDom
 import Reflex.SSDom
 import Reflex.Vaadin.Widget
 
 import Control.Monad (void)
+import Control.Monad.IO.Class (MonadIO)
+import Control.Monad.Fix (MonadFix)
 import Data.Default (Default(..))
 import Network.Wai.Handler.Warp (run)
 import Reflex
-
-{-
-import Network.Wai.SSDom
-
-
-import Reflex hiding (Request, Response)
 import Reflex.Network
+import Text.XML (Node)
 
-import Control.Applicative (liftA2)
-import Control.Concurrent (forkIO, threadDelay)
-import Control.Monad.STM (STM, atomically, check)
-import Control.Concurrent.STM.TMVar (TMVar, newEmptyTMVarIO, takeTMVar, putTMVar)
-import Control.Concurrent.STM.TVar (TVar, newTVarIO, readTVar, writeTVar)
-import Control.Concurrent.STM.TQueue (TQueue, newTQueueIO, writeTQueue)
-import Control.Monad.Reader
-import Data.Aeson (Value, toJSON, decode, encode)
-import Data.ByteString (ByteString)
-import Data.ByteString.Lazy.Char8 (pack)
-import qualified Data.ByteString.Lazy as LBS
-import Data.Cache.LRU (LRU, newLRU)
-import qualified Data.Cache.LRU as LRU
-import Data.List (intercalate)
-import Data.Text (Text)
-import qualified Data.Text as T
-import qualified Data.Text.Encoding as T
-import Data.Map.Strict (Map)
-import qualified Data.Map.Strict as Map
-import Data.IORef (IORef, newIORef, atomicModifyIORef, readIORef, atomicWriteIORef)
-import Network.HTTP.Types.Method (StdMethod(..))
-import Network.HTTP.Types.Status (Status, status200, status303, status403)
-import Network.Wai (Application, Response, responseLBS)
-import Network.Wai.Middleware.Static (staticPolicy, only)
-import Network.Wai.Routing.Purescheme.Core
-import Network.Wai.Routing.Purescheme.Core.Internal
-import System.Random (randomIO)
-import Text.XML
-import Text.Blaze.Html.Renderer.Utf8 (renderHtml)
-import Text.Blaze (toMarkup)
-
-import Text.XML.Delta
--}
 main :: IO ()
 main = do
   dataDir <- getDataDir
   sessionStorage <- emptySessionStorage
-  run 9090 $ app (dataDir ++ "/js/dist") (mainSSDWidget exampleUi) sessionStorage
+  run 9090 $ app (dataDir ++ "/js/dist") (mainSSDWidget demoUI) sessionStorage
 
-exampleUi :: (SSDConstraints t m) => SSDWidget t m (Event t ())
+-- TODO This needs to be menu :: (SSDWidgetMonad t m) =>  m (Dynamic t (m ()))
+demoUI :: (SSDConstraints t m) => SSDWidget t m (Event t ())
+demoUI = do
+  jsScript "vaadin.js"
+  horizontalLayout def $ do
+    demoContent <- menu
+    networkView $ demoContent
+    return never
+
+menu :: (SSDWidgetMonad t m) =>  m (Dynamic t (m ()))
+menu = 
+  accordion $ do
+    result1 <- accordionPanel def (span "Basic features") $ basicFeatures
+    result2 <- accordionPanel def (span "Data input") $ dataInput
+    holdDyn initialGui $ leftmost 
+      [ updated result1
+      , updated result2
+      ]
+
+basicFeatures :: (SSDWidgetMonad t m) => m (Dynamic t (m ()))
+basicFeatures = do
+      verticalLayout def $ do
+        iconButton <- button def{_buttonConfig_label = "Icon"}
+        tooltipButton <- button def{_buttonConfig_label = "Tooltip"}
+        holdDyn initialGui $ leftmost 
+          [ fmap (const iconGui) $ _button_click iconButton 
+          , fmap (const tooltipGui) $ _button_click tooltipButton
+          ]
+
+dataInput :: (SSDWidgetMonad t m) => m (Dynamic t (m ()))
+dataInput = do
+    accordion $ do
+      accordionPanel def (span "Textual") $ do 
+        verticalLayout def $ do
+          textButton <- button def{_buttonConfig_label = "Text field"}
+          holdDyn initialGui $ leftmost
+            [ fmap (const textGui) $ _button_click textButton
+            ]
+
+
+textGui :: (SSDWidgetMonad t m) => m ()
+textGui = span "Text Gui"
+
+initialGui :: (SSDWidgetMonad t m) => m ()
+initialGui = span "Initial Gui"
+
+iconGui :: (SSDWidgetMonad t m) => m ()
+iconGui = horizontalLayout def $ do
+  ironIcon "vaadin:vaadin-h"  
+
+tooltipGui :: (SSDWidgetMonad t m) => m ()
+tooltipGui = span "Tooltip GUI!"
+
+exampleUi :: (SSDWidgetMonad t m) => m (Event t ())
 exampleUi = do
   jsScript "vaadin.js"
   verticalLayout def{_orderedLayoutConfig_margin = pure True, _orderedLayoutConfig_padding = pure True, _orderedLayoutConfig_spacing = pure True} $ do

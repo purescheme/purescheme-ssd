@@ -85,7 +85,7 @@ checkbox config initialState = do
           ]
         else return mempty
         
-  tellDyn htmlDyn
+  tellNodes htmlDyn
   return $ Checkbox checkedDyn changeEv
   where
 

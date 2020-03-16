@@ -71,7 +71,7 @@ button config = do
           ! ssDomEventsAttribute ["click"]
           ]
         else return mempty
-  tellDyn htmlDyn
+  tellNodes htmlDyn
   return $ Button clickEv
 
 vaadinButtonElement :: [Node] -> Element

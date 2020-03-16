@@ -48,18 +48,24 @@ instance Reflex t => Default (OrderedLayoutConfig t) where
     , _orderedLayoutConfig_visible = constDyn True
     }
 
+-- verticalLayout :: (MonadHold t m, SSDWidgetMonad t m, MonadIO m, MonadFix m) => 
+--   OrderedLayoutConfig t -> DynamicWriterT t [Node] m a -> m a
 verticalLayout :: (MonadHold t m, SSDWidgetMonad t m, MonadIO m, MonadFix m) => 
-  OrderedLayoutConfig t -> DynamicWriterT t [Node] m a -> m a
+  OrderedLayoutConfig t -> m a -> m a
 verticalLayout = orderedLayout vaadinVerticalLayout
 
+-- horizontalLayout :: (MonadHold t m, SSDWidgetMonad t m, MonadIO m, MonadFix m) => 
+--   OrderedLayoutConfig t -> DynamicWriterT t [Node] m a -> m a
 horizontalLayout :: (MonadHold t m, SSDWidgetMonad t m, MonadIO m, MonadFix m) => 
-  OrderedLayoutConfig t -> DynamicWriterT t [Node] m a -> m a
+  OrderedLayoutConfig t -> m a -> m a
 horizontalLayout = orderedLayout vaadinHorizontalLayout
 
+-- orderedLayout :: (SSDWidgetMonad t m, MonadFix m) => 
+--   ([Node] -> Element) -> OrderedLayoutConfig t -> DynamicWriterT t [Node] m a -> m a
 orderedLayout :: (SSDWidgetMonad t m, MonadFix m) => 
-  ([Node] -> Element) -> OrderedLayoutConfig t -> DynamicWriterT t [Node] m a -> m a
+  ([Node] -> Element) -> OrderedLayoutConfig t -> m a -> m a
 orderedLayout createElement config inner = do
-  (result, innerHtml) <- runDynamicWriterT inner
+  (result, innerHtml) <- runInner inner
   let 
     htmlDyn = do
       nMargin <- _orderedLayoutConfig_margin config
@@ -74,7 +80,7 @@ orderedLayout createElement config inner = do
           ! attribute "theme" theme
           ]
         else return mempty
-  tellDyn htmlDyn
+  tellNodes htmlDyn
   return result
   where
     toMaybe :: Bool -> a -> Maybe a

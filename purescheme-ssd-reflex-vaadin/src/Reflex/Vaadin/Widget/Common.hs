@@ -17,18 +17,27 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Reflex.Vaadin.Widget.Common where
 
+import Reflex.SSDom
 import Text.XML.Simple
 
 import Data.Text (Text)
 import Reflex
 import Text.XML
 
-label :: (Reflex t, DynamicWriter t [Node] m) => Dynamic t Text -> m ()
-label = tellDyn . fmap (pure . simpleNodeElement "span") 
+span :: SSDWidgetMonad t m => Dynamic t Text -> m ()
+span = tellNodes . fmap (pure . simpleNodeElement "span") 
 
-jsScript :: (Reflex t, DynamicWriter t [Node] m) => Text -> m ()
+small :: SSDWidgetMonad t m => Dynamic t Text -> m ()
+small = tellNodes . fmap (pure . simpleNodeElement "small") 
+
+ironIcon :: SSDWidgetMonad t m  => Dynamic t Text -> m ()
+ironIcon iconName = tellNodes $ do
+  nIconName <- iconName
+  return $ [NodeElement $ leafElement "iron-icon" ! attribute "icon" nIconName ]
+
+jsScript :: SSDWidgetMonad t m => Text -> m ()
 jsScript scriptName = 
-  tellDyn 
+  tellNodes 
   $ constDyn 
   [ NodeElement 
     $ leafElement "script" 

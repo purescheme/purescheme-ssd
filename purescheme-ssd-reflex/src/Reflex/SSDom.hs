@@ -31,7 +31,7 @@ module Reflex.SSDom
   ( SSDWidget
   , SSDWidgetContext
   , SSDConstraints
-  , SSDWidgetMonad
+  , SSDWidgetMonad(..)
   , FrontendEvent(..)
   , nextId
   , runSSDWidget
@@ -41,7 +41,6 @@ module Reflex.SSDom
 where
 
 import Purescheme.SSDom
-
 
 import Control.Concurrent (forkIO)
 import Control.Concurrent.Chan (newChan, readChan)
@@ -126,22 +125,35 @@ type SSDConstraints t m =
   , Adjustable t m
   )
 
+class (Monad m, Reflex t, NotReady t m, Adjustable t m, MonadHold t m, MonadFix m, MonadIO m) => SSDWidgetMonad t m | m -> t where
+  tellNodes :: Dynamic t [Node] -> m ()
+  runInner :: m a -> m (a, Dynamic t [Node])
+  nextId :: m (Int, Event t (Text, Value))
+
+instance (Monad m, Reflex t, NotReady t m, Adjustable t m, MonadHold t m, MonadFix m, MonadIO m) => SSDWidgetMonad t (SSDWidget t m) where
+  tellNodes dynNodes = SSDWidget $ tellDyn dynNodes
+  runInner (SSDWidget actual) = do
+    context <- ask
+    (result, inner) <- lift $ runReaderT (runDynamicWriterT actual) context
+    return (result, inner)
+  nextId = do
+    SSDWidgetContext idRef inputEvent <- ask
+    newId <- liftIO $ atomicModifyIORef idRef (\i -> (i + 1, i + 1))
+    let componentEvents = fmap (\(FrontendEvent a b c) -> (a, b, c)) inputEvent
+    let componentEvents2 = ffilter (\(componentId, _, _) -> componentId == newId) componentEvents
+    let componentEvents3 = fmap (\(_, a, b) -> (a, b)) componentEvents2
+    return (newId, componentEvents3)
+
+{- 
 type SSDWidgetMonad t m =
   ( DynamicWriter t [Node] m
   , MonadReader (SSDWidgetContext t) m
   , Reflex t
   , MonadIO m
   )
-
-nextId :: (SSDWidgetMonad t m) => m (Int, Event t (Text, Value))
-nextId = do
-  SSDWidgetContext idRef inputEvent <- ask
-  newId <- liftIO $ atomicModifyIORef idRef (\i -> (i + 1, i + 1))
-  let componentEvents = fmap (\(FrontendEvent a b c) -> (a, b, c)) inputEvent
-  let componentEvents2 = ffilter (\(componentId, _, _) -> componentId == newId) componentEvents
-  let componentEvents3 = fmap (\(_, a, b) -> (a, b)) componentEvents2
-  return (newId, componentEvents3)
-
+-}
+{- 
+-}
 mainSSDWidget :: (forall t m. SSDConstraints t m => SSDWidget t m (Event t ())) -> IO SSDomIO
 mainSSDWidget network = do
   inputTMVar <- newEmptyTMVarIO
@@ -160,6 +172,13 @@ runSSDWidget ::  SSDConstraints t m => Event t FrontendEvent -> SSDWidget t m (E
 runSSDWidget input widget = do
     idRef <- liftIO $ newIORef 0
     runReaderT ( runDynamicWriterT (unSSDWidget widget)) (SSDWidgetContext idRef input)
+{- 
+runInnerWidget :: (Monad m, Reflex t, MonadFix m, MonadReader (SSDWidgetContext t) m) => SSDWidget t m a -> m (a, Dynamic t [Node])
+runInnerWidget (SSDWidget actual) = do
+  context <- ask
+  (result, inner) <- runReaderT (runDynamicWriterT actual) context
+  return (result, inner)
+-}
 
 output :: (PerformEvent t m, MonadIO (Performable m), Reflex t) => TVar [Node] -> Event t [Node] -> m ()
 output varState ev =

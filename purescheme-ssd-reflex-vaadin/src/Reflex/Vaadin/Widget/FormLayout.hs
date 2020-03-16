@@ -38,9 +38,9 @@ instance Reflex t => Default (FormLayoutConfig t) where
     }
 
 formLayout :: (MonadHold t m, SSDWidgetMonad t m, MonadIO m, MonadFix m) => 
-  FormLayoutConfig t -> DynamicWriterT t [Node] m a -> m a
+  FormLayoutConfig t -> m a -> m a
 formLayout config inner = do
-  (result, innerHtml) <- runDynamicWriterT inner
+  (result, innerHtml) <- runInner inner
   let 
     htmlDyn = do
       nVisible <- _formLayoutConfig_visible config
@@ -50,7 +50,7 @@ formLayout config inner = do
           [ NodeElement $ vaadinFormLayout nInner
           ]
         else return mempty
-  tellDyn htmlDyn
+  tellNodes htmlDyn
   return result
 
 

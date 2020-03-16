@@ -13,7 +13,8 @@
 -- limitations under the License.
 -------------------------------------------------------------------------------
 module Reflex.Vaadin.Widget 
-( module Reflex.Vaadin.Widget.Common
+( module Reflex.Vaadin.Widget.Accordion
+, module Reflex.Vaadin.Widget.Common
 , module Reflex.Vaadin.Widget.Button
 , module Reflex.Vaadin.Widget.Checkbox
 , module Reflex.Vaadin.Widget.OrderedLayout
@@ -21,6 +22,7 @@ module Reflex.Vaadin.Widget
 , module Reflex.Vaadin.Widget.FormLayout
 ) where
 
+import Reflex.Vaadin.Widget.Accordion
 import Reflex.Vaadin.Widget.Common
 import Reflex.Vaadin.Widget.Button
 import Reflex.Vaadin.Widget.Checkbox
