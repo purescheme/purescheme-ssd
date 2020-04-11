@@ -1,12 +1,8 @@
   
-window.addEventListener('load', () => {
-  initUI();
-});
-
 function handleReflexVaadinEvent(ev) {
   // TODO: serialize the calls so no parallel calls are made
   const bodyElement = document.getElementsByTagName("BODY")[0]; 
-  const sid = bodyElement.attributes.getNamedItem("data-reflex-vaadin-sid").value;
+  const sid = bodyElement.attributes.getNamedItem("data-purescheme-ssd-sid").value;
   var deta;
   if (ev.type == "input") {
     deta = {value: ev.target.value};    
@@ -25,9 +21,9 @@ function handleReflexVaadinEvent(ev) {
     },
     method: 'POST',
     body: JSON.stringify({
-      _frontendEvent_elementId: parseInt(ev.srcElement.id), 
-      _frontendEvent_eventName: ev.type, 
-      _frontendEvent_details: deta
+      elementId: parseInt(ev.srcElement.id), 
+      eventName: ev.type, 
+      details: deta
     })
   })
   .catch(function(res){ console.log(res) });
@@ -40,9 +36,9 @@ function initUI() {
 
 function getEvents() {
   const bodyElement = document.getElementsByTagName("BODY")[0]; 
-  const sid = bodyElement.attributes.getNamedItem("data-reflex-vaadin-sid").value;
-  const mainApplication = document.getElementById("reflex-vaadin-main-app");
-  const snapshot = mainApplication.attributes.getNamedItem("data-reflex-vaadin-snapshot").value;
+  const sid = bodyElement.attributes.getNamedItem("data-purescheme-ssd-sid").value;
+  const mainApplication = document.getElementById("purescheme-ssd-main-app");
+  const snapshot = mainApplication.attributes.getNamedItem("data-purescheme-ssd-snapshot").value;
   fetch(`/events?sid=${sid}&snapshot=${snapshot}`, {
     headers: {
       'Accept': 'text/html',
@@ -51,7 +47,7 @@ function getEvents() {
   })
   .then((response) => response.json())
   .then((result) => {
-    mainApplication.setAttribute("data-reflex-vaadin-snapshot", result[0]);
+    mainApplication.setAttribute("data-purescheme-ssd-snapshot", result[0]);
     processDeltas(mainApplication, result[1]);
   })
   .then(addListeners) // TODO Add listeners only to new elements
@@ -149,3 +145,7 @@ function addListeners() {
     });
   });
 }
+
+window.addEventListener('load', () => {
+  initUI();
+});

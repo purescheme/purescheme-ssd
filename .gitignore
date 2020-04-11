@@ -5,6 +5,6 @@ purescheme-ssd-reflex-vaadin/purescheme-ssd-reflex-vaadin.cabal
 purescheme-ssd-reflex/purescheme-ssd-reflex.cabal
 purescheme-ssd-wai/purescheme-ssd-wai.cabal
 purescheme-ssd-core/purescheme-ssd-core.cabal
-purescheme-ssd-reflex-vaadin/js/node_modules
-purescheme-ssd-reflex-vaadin/js/dist
+node_modules/
+dist
 

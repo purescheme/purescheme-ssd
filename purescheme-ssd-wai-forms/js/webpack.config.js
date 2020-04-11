@@ -5,7 +5,6 @@ module.exports = ({ mode }) => {
     mode, 
     entry: {
       vaadin: '@vaadin/vaadin',
-      'ssd-driver': './src/ssd-driver.js'
     },
     devtool: mode === 'development' ? 'source-map' : 'none' 
     /*,

@@ -20,7 +20,10 @@ module Purescheme.SSDom
 where
 
 import Control.Concurrent.STM (STM)
-import Data.Aeson (FromJSON, ToJSON, Value)
+import Data.Aeson (FromJSON(..), ToJSON(..), Value, 
+  genericParseJSON, genericToJSON, genericToEncoding, fieldLabelModifier, defaultOptions)
+import Data.List (stripPrefix)
+import Data.Maybe (fromJust)
 import Data.Text (Text)
 import GHC.Generics (Generic)
 import Text.XML (Node)
@@ -34,6 +37,17 @@ data FrontendEvent
   , _frontendEvent_details :: Value
   } deriving (Generic, Show)
 
-instance FromJSON FrontendEvent
-instance ToJSON FrontendEvent
+
+frontendEventJsonOptions = 
+  defaultOptions
+    { fieldLabelModifier = fromJust . (stripPrefix "_frontendEvent_")
+    }
+
+instance FromJSON FrontendEvent where
+  parseJSON = genericParseJSON frontendEventJsonOptions
+  
+instance ToJSON FrontendEvent where
+  toJSON = genericToJSON frontendEventJsonOptions
+  toEncoding = genericToEncoding frontendEventJsonOptions
+
 

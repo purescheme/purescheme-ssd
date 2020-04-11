@@ -4,6 +4,7 @@
 {-# language NamedFieldPuns #-}
 {-# language TemplateHaskell #-}
 {-# LANGUAGE RecursiveDo #-}
+{-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE LambdaCase #-}
 module Main where
 
@@ -11,32 +12,35 @@ import Paths_purescheme_ssd_reflex_vaadin
 
 -- import Development.Placeholders
 
-import Prelude hiding (span)
+import Prelude hiding (span, div)
 
 import Network.Wai.SSDom
+import Network.Wai.SSDom.Forms
 import Reflex.SSDom
+import Reflex.SSDom.Basic
 import Reflex.Vaadin.Widget
 
 import Control.Monad (void)
 import Control.Monad.IO.Class (MonadIO)
 import Control.Monad.Fix (MonadFix)
 import Data.Default (Default(..))
+import Data.String.Interpolate.IsString (i)
 import Network.Wai.Handler.Warp (run)
 import Reflex
 import Reflex.Network
 import Text.XML (Node)
+import Text.XML.Simple
 
 main :: IO ()
 main = do
   dataDir <- getDataDir
   sessionStorage <- emptySessionStorage
-  run 9090 $ app (dataDir ++ "/js/dist") (mainSSDWidget demoUI) sessionStorage
+  run 9090 $ formsApp "Hello from Haskell!" (mainSSDWidget demoUI) sessionStorage
 
 -- TODO This needs to be menu :: (SSDWidgetMonad t m) =>  m (Dynamic t (m ()))
 -- demoUI :: (SSDConstraints t m) => SSDWidget t m (Event t ())
 demoUI :: (SSDWidgetMonad t m) =>  m (Event t ())
 demoUI = do
-  jsScript "vaadin.js"
   horizontalLayout def $ do
     demoContent <- menu
     networkView $ demoContent
@@ -85,9 +89,26 @@ iconGui = horizontalLayout def $ do
 tooltipGui :: (SSDWidgetMonad t m) => m ()
 tooltipGui = span "Tooltip GUI!"
 
+buttonExample :: (SSDWidgetMonad t m) => m ()
+buttonExample = 
+  verticalLayout def $ do
+    exampleBasic
+    -- exampleDisabled
+    -- exampleIcon
+  where
+    exampleBasic = exampleWith "Basic Button" $ do
+      horizontalLayout def $ do 
+        btn1 <- button def{_buttonConfig_label = "Button"}
+        clickCount <- count $ _button_click btn1
+        content $ fmap (\c -> [i|clicked #{c} times.|]) clickCount
+
+    exampleWith header content = do
+      verticalLayout def $ do
+        constSimpleElement "h2" header
+        div $ content   
+
 exampleUi :: (SSDWidgetMonad t m) => m (Event t ())
 exampleUi = do
-  jsScript "vaadin.js"
   verticalLayout def{_orderedLayoutConfig_margin = pure True, _orderedLayoutConfig_padding = pure True, _orderedLayoutConfig_spacing = pure True} $ do
     horizontalLayout def{_orderedLayoutConfig_margin = pure True, _orderedLayoutConfig_padding = pure True, _orderedLayoutConfig_spacing = pure True} $ mdo
       button1 <- button def{_buttonConfig_label = "Click me"}

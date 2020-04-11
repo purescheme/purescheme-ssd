@@ -12,20 +12,5 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 -------------------------------------------------------------------------------
-{-# LANGUAGE FlexibleContexts #-}
-{-# LANGUAGE TypeFamilies #-}
-{-# LANGUAGE OverloadedStrings #-}
-module Reflex.Vaadin.Widget.Common where
-
-import Reflex.SSDom
-import Text.XML.Simple
-
-import qualified Data.Map as Map
-import Data.Text (Text)
-import Reflex
-import Text.XML
-
-ironIcon :: SSDWidgetMonad t m  => Dynamic t Text -> m ()
-ironIcon iconName = tellNodes $ do
-  nIconName <- iconName
-  return $ [NodeElement $ leafElement "iron-icon" ! attribute "icon" nIconName ]
+main :: IO ()
+main = putStrLn "Test suite not yet implemented"

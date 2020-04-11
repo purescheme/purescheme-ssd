@@ -1,0 +1,87 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.31.2.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 50e459674b181373eb9c3e920edc2e6288434c7dfe4e7dcc6b54adae3f37484f
+
+name:           purescheme-ssd-wai-forms
+version:        0.1.0.0
+synopsis:       Purescheme Server Side Dom - Wai Application
+description:    Please see the README on GitHub at <https://github.com/purescheme/purescheme-ssd#readme>
+category:       Web
+homepage:       https://github.com/purescheme/purescheme-ssd#readme
+bug-reports:    https://github.com/purescheme/purescheme-ssd/issues
+author:         Fernando Rincon Martin
+maintainer:     f.rincon@protonmail.com
+copyright:      2020 Fernando Rincon Martin
+license:        Apache-2.0
+build-type:     Simple
+extra-source-files:
+    README.md
+    ChangeLog.md
+data-files:
+    js/dist/vaadin.js
+
+source-repository head
+  type: git
+  location: https://github.com/purescheme/purescheme-ssd
+
+flag development
+  description: Used while development
+  manual: True
+  default: False
+
+library
+  exposed-modules:
+      Network.Wai.SSDom.Forms
+  other-modules:
+      Paths_purescheme_ssd_wai_forms
+  hs-source-dirs:
+      src
+  ghc-options: -Wall
+  build-depends:
+      base >=4.7 && <5
+    , base16-bytestring
+    , bytestring
+    , cryptohash-md5
+    , file-embed
+    , http-types
+    , purescheme-ssd-core
+    , purescheme-ssd-wai
+    , purescheme-wai-routing-core
+    , text
+    , wai
+    , xml-conduit
+  if flag(development)
+    build-depends:
+        placeholders
+  default-language: Haskell2010
+
+test-suite purescheme-ssd-core-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_purescheme_ssd_wai_forms
+  hs-source-dirs:
+      test
+  ghc-options: -Wall -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , base16-bytestring
+    , bytestring
+    , cryptohash-md5
+    , file-embed
+    , http-types
+    , purescheme-ssd-core
+    , purescheme-ssd-wai
+    , purescheme-ssd-wai-forms
+    , purescheme-wai-routing-core
+    , text
+    , wai
+    , xml-conduit
+  if flag(development)
+    build-depends:
+        placeholders
+  default-language: Haskell2010

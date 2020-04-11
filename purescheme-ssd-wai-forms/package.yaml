@@ -1,4 +1,4 @@
-name:                purescheme-ssd-wai
+name:                purescheme-ssd-wai-forms
 version:             0.1.0.0
 github:              "purescheme/purescheme-ssd"
 license:             Apache-2.0
@@ -33,22 +33,26 @@ when:
 ghc-options:
 - -Wall
 
+data-files:
+- js/dist/*.js
+
 dependencies:
 - base >= 4.7 && < 5
-- aeson
+# - aeson
 - base16-bytestring
-- blaze-html
-- blaze-markup
+# - blaze-html
+# - blaze-markup
 - bytestring
-- containers
+# - containers
 - cryptohash-md5
 - file-embed
 - http-types
-- lrucache
+# - lrucache
 - purescheme-ssd-core
+- purescheme-ssd-wai
 - purescheme-wai-routing-core
-- random
-- stm
+# - random
+# - stm
 - text
 - wai
 - xml-conduit
@@ -66,4 +70,4 @@ tests:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - purescheme-ssd-core
+    - purescheme-ssd-wai-forms

@@ -33,10 +33,6 @@ when:
 ghc-options:
 - -Wall
 
-data-files:
-- js/dist/ssd-driver.js
-- js/dist/vaadin.js
-
 dependencies:
 - base >= 4.7 && < 5
 - aeson
@@ -63,8 +59,10 @@ executables:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
+    - interpolate
     - purescheme-ssd-reflex-vaadin
     - purescheme-ssd-wai
+    - purescheme-ssd-wai-forms
     - warp
 
 tests:

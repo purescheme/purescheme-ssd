@@ -3,6 +3,7 @@ resolver: lts-14.27
 packages:
 - purescheme-ssd-core
 - purescheme-ssd-wai
+- purescheme-ssd-wai-forms
 - purescheme-ssd-reflex
 - purescheme-ssd-reflex-vaadin
 
