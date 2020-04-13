@@ -24,6 +24,7 @@ import Control.Monad (void)
 import Control.Monad.IO.Class (MonadIO)
 import Control.Monad.Fix (MonadFix)
 import Data.Default (Default(..))
+import Data.Text (Text)
 import Data.String.Interpolate.IsString (i)
 import Network.Wai.Handler.Warp (run)
 import Reflex
@@ -37,11 +38,9 @@ main = do
   sessionStorage <- emptySessionStorage
   run 9090 $ formsApp "Hello from Haskell!" (mainSSDWidget demoUI) sessionStorage
 
--- TODO This needs to be menu :: (SSDWidgetMonad t m) =>  m (Dynamic t (m ()))
--- demoUI :: (SSDConstraints t m) => SSDWidget t m (Event t ())
 demoUI :: (SSDWidgetMonad t m) =>  m (Event t ())
 demoUI = do
-  horizontalLayout def $ do
+  horizontalLayout def { _orderedLayoutConfig_style = constDyn [("flex-grow", "1")] } $ do
     demoContent <- menu
     networkView $ demoContent
     return never
@@ -58,13 +57,13 @@ menu =
 
 basicFeatures :: (SSDWidgetMonad t m) => m (Dynamic t (m ()))
 basicFeatures = do
-      verticalLayout def $ do
-        iconButton <- button def{_buttonConfig_label = "Icon"}
-        tooltipButton <- button def{_buttonConfig_label = "Tooltip"}
-        holdDyn initialGui $ leftmost 
-          [ fmap (const iconGui) $ _button_click iconButton 
-          , fmap (const tooltipGui) $ _button_click tooltipButton
-          ]
+  verticalLayout def $ do
+    iconButton <- button def{_buttonConfig_label = "Icon"}
+    tooltipButton <- button def{_buttonConfig_label = "Tooltip"}
+    holdDyn initialGui $ leftmost 
+      [ fmap (const iconGui) $ _button_click iconButton 
+      , fmap (const tooltipGui) $ _button_click tooltipButton
+      ]
 
 dataInput :: (SSDWidgetMonad t m) => m (Dynamic t (m ()))
 dataInput = do
@@ -83,8 +82,15 @@ initialGui :: (SSDWidgetMonad t m) => m ()
 initialGui = span "Initial Gui"
 
 iconGui :: (SSDWidgetMonad t m) => m ()
-iconGui = horizontalLayout def $ do
+iconGui = horizontalLayout def{ _orderedLayoutConfig_style = constDyn centerAndGrowStyles } $ do
   ironIcon "vaadin:vaadin-h"  
+
+centerAndGrowStyles :: [(Text, Text)]
+centerAndGrowStyles = 
+  [ ("flex-grow", "1")
+  , ("justify-content", "center")
+  , ("align-items", "center")
+  ]
 
 tooltipGui :: (SSDWidgetMonad t m) => m ()
 tooltipGui = span "Tooltip GUI!"

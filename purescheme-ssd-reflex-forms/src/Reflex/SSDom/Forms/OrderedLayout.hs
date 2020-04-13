@@ -27,8 +27,9 @@ import Control.Monad.Reader (MonadFix)
 import Data.Default (Default(..))
 import qualified Data.Map as Map
 import Data.Maybe (catMaybes)
-import Reflex
+import Data.Text (Text)
 import qualified Data.Text as T
+import Reflex
 import Text.XML
 
 data OrderedLayoutConfig t
@@ -37,6 +38,7 @@ data OrderedLayoutConfig t
   , _orderedLayoutConfig_padding :: Dynamic t Bool
   , _orderedLayoutConfig_spacing :: Dynamic t Bool
   , _orderedLayoutConfig_visible :: Dynamic t Bool
+  , _orderedLayoutConfig_style :: Dynamic t [(Text, Text)]
   }
 
 instance Reflex t => Default (OrderedLayoutConfig t) where
@@ -46,6 +48,7 @@ instance Reflex t => Default (OrderedLayoutConfig t) where
     , _orderedLayoutConfig_padding = constDyn False
     , _orderedLayoutConfig_spacing = constDyn False
     , _orderedLayoutConfig_visible = constDyn True
+    , _orderedLayoutConfig_style = constDyn []
     }
 
 -- verticalLayout :: (MonadHold t m, SSDWidgetMonad t m, MonadIO m, MonadFix m) => 
@@ -72,12 +75,14 @@ orderedLayout createElement config inner = do
       nPadding <- _orderedLayoutConfig_padding config
       nSpacing <- _orderedLayoutConfig_spacing config
       nVisible <- _orderedLayoutConfig_visible config
+      nStyles <- _orderedLayoutConfig_style config
       nInner <- innerHtml
       let theme = T.intercalate " " $ catMaybes [toMaybe nMargin "margin", toMaybe nPadding "padding", toMaybe nSpacing "spacing"]
       if nVisible
         then return 
           [ NodeElement $ createElement nInner
           ! attribute "theme" theme
+          ! attribute "style" (T.intercalate ";" (fmap (\(k,v) -> T.intercalate ":" [k, v]) nStyles))
           ]
         else return mempty
   tellNodes htmlDyn
