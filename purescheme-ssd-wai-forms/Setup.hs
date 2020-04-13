@@ -12,5 +12,16 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 -------------------------------------------------------------------------------
+import Distribution.PackageDescription
 import Distribution.Simple
-main = defaultMain
+import Distribution.Simple.Setup
+
+import System.Process (callCommand)
+
+main = defaultMainWithHooks $ simpleUserHooks { preConf = runNpm }
+
+runNpm :: Args -> ConfigFlags -> IO HookedBuildInfo
+runNpm _ _ = do
+  callCommand "npm install --prefix js"
+  callCommand "npm run prod --prefix js"
+  return emptyHookedBuildInfo

@@ -1,10 +1,10 @@
-cabal-version: 1.12
+cabal-version: 1.24
 
 -- This file has been generated from package.yaml by hpack version 0.31.2.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 50e459674b181373eb9c3e920edc2e6288434c7dfe4e7dcc6b54adae3f37484f
+-- hash: e211c566118e617d1246a8cdbe1e1ed9ae33687da7917292c243543589dafad8
 
 name:           purescheme-ssd-wai-forms
 version:        0.1.0.0
@@ -17,16 +17,24 @@ author:         Fernando Rincon Martin
 maintainer:     f.rincon@protonmail.com
 copyright:      2020 Fernando Rincon Martin
 license:        Apache-2.0
-build-type:     Simple
+build-type:     Custom
 extra-source-files:
     README.md
     ChangeLog.md
+    js/package.json
+    js/webpack.config.js
 data-files:
     js/dist/vaadin.js
 
 source-repository head
   type: git
   location: https://github.com/purescheme/purescheme-ssd
+
+custom-setup
+  setup-depends:
+      Cabal
+    , base
+    , process
 
 flag development
   description: Used while development
