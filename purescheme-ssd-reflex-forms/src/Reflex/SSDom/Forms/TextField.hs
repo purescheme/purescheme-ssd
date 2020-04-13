@@ -14,10 +14,10 @@
 -------------------------------------------------------------------------------
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE OverloadedStrings #-}
-module Reflex.Vaadin.Widget.TextField where
+module Reflex.SSDom.Forms.TextField where
 
 import Reflex.SSDom
-import Reflex.Vaadin.Widget.Internal
+import Reflex.SSDom.Forms.Internal
 import Text.XML.Simple
 
 import Control.Monad (void)

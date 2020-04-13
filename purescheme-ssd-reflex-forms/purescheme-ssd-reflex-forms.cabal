@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 10361975a258e80522a00eacd4f5994c0d72e2eb3fb325297bbe505589bfd49d
+-- hash: f99ea26dd2135ab019b8f821d234eede849ed8223ea959284383e32d46e9923d
 
 name:           purescheme-ssd-reflex-forms
 version:        0.1.0.0
@@ -33,17 +33,16 @@ flag development
 
 library
   exposed-modules:
-      Reflex.Vaadin.Wai
-      Reflex.Vaadin.Widget
-      Reflex.Vaadin.Widget.Accordion
-      Reflex.Vaadin.Widget.Button
-      Reflex.Vaadin.Widget.Checkbox
-      Reflex.Vaadin.Widget.Common
-      Reflex.Vaadin.Widget.FormLayout
-      Reflex.Vaadin.Widget.OrderedLayout
-      Reflex.Vaadin.Widget.TextField
+      Reflex.SSDom.Forms
+      Reflex.SSDom.Forms.Accordion
+      Reflex.SSDom.Forms.Button
+      Reflex.SSDom.Forms.Checkbox
+      Reflex.SSDom.Forms.Common
+      Reflex.SSDom.Forms.FormLayout
+      Reflex.SSDom.Forms.OrderedLayout
+      Reflex.SSDom.Forms.TextField
   other-modules:
-      Reflex.Vaadin.Widget.Internal
+      Reflex.SSDom.Forms.Internal
   hs-source-dirs:
       src
   ghc-options: -Wall

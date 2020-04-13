@@ -16,7 +16,7 @@
 {-# language RankNTypes #-}
 {-# language OverloadedStrings #-}
 {-# language TemplateHaskell #-}
-module Reflex.Vaadin.Widget.Accordion
+module Reflex.SSDom.Forms.Accordion
   ( accordion
   , accordionPanel
   )

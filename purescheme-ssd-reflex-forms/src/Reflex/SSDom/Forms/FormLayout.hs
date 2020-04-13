@@ -15,7 +15,7 @@
 {-# language FlexibleContexts, TypeFamilies #-}
 {-# language RankNTypes #-}
 {-# language OverloadedStrings #-}
-module Reflex.Vaadin.Widget.FormLayout where
+module Reflex.SSDom.Forms.FormLayout where
 
 import Reflex.SSDom
 

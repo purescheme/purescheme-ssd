@@ -15,10 +15,10 @@
 {-# language FlexibleContexts, TypeFamilies #-}
 {-# language RankNTypes #-}
 {-# language OverloadedStrings #-}
-module Reflex.Vaadin.Widget.Checkbox where
+module Reflex.SSDom.Forms.Checkbox where
 
 import Reflex.SSDom
-import Reflex.Vaadin.Widget.Internal
+import Reflex.SSDom.Forms.Internal
 import Text.XML.Simple
 
 import Control.Monad (void)

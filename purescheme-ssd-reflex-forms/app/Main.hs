@@ -18,7 +18,7 @@ import Network.Wai.SSDom
 import Network.Wai.SSDom.Forms
 import Reflex.SSDom
 import Reflex.SSDom.Basic
-import Reflex.Vaadin.Widget
+import Reflex.SSDom.Forms
 
 import Control.Monad (void)
 import Control.Monad.IO.Class (MonadIO)

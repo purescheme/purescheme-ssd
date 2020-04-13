@@ -15,7 +15,7 @@
 {-# language FlexibleContexts, TypeFamilies #-}
 {-# language RankNTypes #-}
 {-# language OverloadedStrings #-}
-module Reflex.Vaadin.Widget.Button where
+module Reflex.SSDom.Forms.Button where
 
 import Reflex.SSDom
 import Text.XML.Simple

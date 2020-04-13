@@ -17,7 +17,7 @@
 {-# language OverloadedStrings #-}
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE DeriveAnyClass #-}
-module Reflex.Vaadin.Widget.OrderedLayout where
+module Reflex.SSDom.Forms.OrderedLayout where
 
 import Reflex.SSDom
 import Text.XML.Simple

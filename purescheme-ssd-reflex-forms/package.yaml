@@ -48,7 +48,7 @@ dependencies:
 library:
   source-dirs: src
   other-modules:
-  - Reflex.Vaadin.Widget.Internal
+  - Reflex.SSDom.Forms.Internal
 
 executables:
   purescheme-reflex-forms-demo:
