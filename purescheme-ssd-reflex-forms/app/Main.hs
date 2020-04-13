@@ -8,7 +8,7 @@
 {-# LANGUAGE LambdaCase #-}
 module Main where
 
-import Paths_purescheme_ssd_reflex_vaadin
+import Paths_purescheme_ssd_reflex_forms
 
 -- import Development.Placeholders
 

@@ -1,4 +1,4 @@
-name:                purescheme-ssd-reflex-vaadin
+name:                purescheme-ssd-reflex-forms
 version:             0.1.0.0
 github:              "purescheme/purescheme-ssd"
 license:             Apache-2.0
@@ -51,7 +51,7 @@ library:
   - Reflex.Vaadin.Widget.Internal
 
 executables:
-  purescheme-reflex-vaadin-demo:
+  purescheme-reflex-forms-demo:
     source-dirs: app
     main: Main.hs
     ghc-options:
@@ -60,7 +60,7 @@ executables:
     - -with-rtsopts=-N
     dependencies:
     - interpolate
-    - purescheme-ssd-reflex-vaadin
+    - purescheme-ssd-reflex-forms
     - purescheme-ssd-wai
     - purescheme-ssd-wai-forms
     - warp
@@ -74,4 +74,4 @@ tests:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - purescheme-ssd-reflex-vaadin
+    - purescheme-ssd-reflex-forms

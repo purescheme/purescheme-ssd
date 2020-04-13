@@ -5,7 +5,7 @@ packages:
 - purescheme-ssd-wai
 - purescheme-ssd-wai-forms
 - purescheme-ssd-reflex
-- purescheme-ssd-reflex-vaadin
+- purescheme-ssd-reflex-forms
 
 extra-deps:
 - reflex-0.6.4
