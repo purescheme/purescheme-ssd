@@ -24,6 +24,7 @@ import Control.Monad (void)
 import Control.Monad.IO.Class (MonadIO)
 import Control.Monad.Fix (MonadFix)
 import Data.Default (Default(..))
+import Data.Functor (($>))
 import Data.Text (Text)
 import Data.String.Interpolate.IsString (i)
 import Network.Wai.Handler.Warp (run)
@@ -38,40 +39,50 @@ main = do
   sessionStorage <- emptySessionStorage
   run 9090 $ formsApp "Hello from Haskell!" (mainSSDWidget demoUI) sessionStorage
 
-demoUI :: (SSDWidgetMonad t m) =>  m (Event t ())
+demoUI :: SSDWidgetMonad t m =>  m (Event t ())
 demoUI = do
-  horizontalLayout def { _orderedLayoutConfig_style = constDyn [("flex-grow", "1")] } $ do
-    demoContent <- menu
+  appLayout (AppLayoutConfig (constDyn [("flex-grow", "1")])) $ do
+    demoContent <- drawer menu
+    navbar $ do
+      drawerToggle
+      constSimpleElement "h4" "Wellcome to purescheme forms demo!"
     networkView $ demoContent
     return never
 
 menu :: (SSDWidgetMonad t m) =>  m (Dynamic t (m ()))
 menu = 
   accordion $ do
-    result1 <- accordionPanel def (span "Basic features") $ basicFeatures
-    result2 <- accordionPanel def (span "Data input") $ dataInput
-    holdDyn initialGui $ leftmost 
-      [ updated result1
-      , updated result2
+    results <- sequence
+      [ accordionPanel def (span "Form Input") $ formInput
+      , accordionPanel def (span "Visualization") $ visualization
+      ]
+    holdDyn initialGui $ fmap demoLayout (leftmost results)
+
+formInput :: (SSDWidgetMonad t m) => m (Event t (m ()))
+formInput = do
+  verticalLayout def $ do
+    textButton <- button def{_buttonConfig_label = "Text field"}
+    return $ leftmost
+      [  _button_click textButton $> textGui
       ]
 
-basicFeatures :: (SSDWidgetMonad t m) => m (Dynamic t (m ()))
-basicFeatures = do
+visualization :: (SSDWidgetMonad t m) => m (Event t (m ()))
+visualization = do
   verticalLayout def $ do
     iconButton <- button def{_buttonConfig_label = "Icon"}
     tooltipButton <- button def{_buttonConfig_label = "Tooltip"}
-    holdDyn initialGui $ leftmost 
-      [ fmap (const iconGui) $ _button_click iconButton 
-      , fmap (const tooltipGui) $ _button_click tooltipButton
+    return $ leftmost 
+      [ _button_click iconButton $> iconGui
+      , _button_click tooltipButton $> tooltipGui
       ]
 
-dataInput :: (SSDWidgetMonad t m) => m (Dynamic t (m ()))
+dataInput :: (SSDWidgetMonad t m) => m (Event t (m ()))
 dataInput = do
     accordion $ do
       accordionPanel def (span "Textual") $ do 
         verticalLayout def $ do
           textButton <- button def{_buttonConfig_label = "Text field"}
-          holdDyn initialGui $ leftmost
+          return $ leftmost
             [ fmap (const textGui) $ _button_click textButton
             ]
 
@@ -79,17 +90,20 @@ textGui :: (SSDWidgetMonad t m) => m ()
 textGui = span "Text Gui"
 
 initialGui :: (SSDWidgetMonad t m) => m ()
-initialGui = span "Initial Gui"
+initialGui = demoLayout $ span "Initial Gui"
 
 iconGui :: (SSDWidgetMonad t m) => m ()
-iconGui = horizontalLayout def{ _orderedLayoutConfig_style = constDyn centerAndGrowStyles } $ do
-  ironIcon "vaadin:vaadin-h"  
+iconGui = ironIcon "vaadin:vaadin-h"  
+
+demoLayout :: SSDWidgetMonad t m => m a -> m a
+demoLayout = horizontalLayout def{ _orderedLayoutConfig_style = constDyn centerAndGrowStyles }
 
 centerAndGrowStyles :: [(Text, Text)]
 centerAndGrowStyles = 
   [ ("flex-grow", "1")
   , ("justify-content", "center")
   , ("align-items", "center")
+  , ("height", "100%")
   ]
 
 tooltipGui :: (SSDWidgetMonad t m) => m ()

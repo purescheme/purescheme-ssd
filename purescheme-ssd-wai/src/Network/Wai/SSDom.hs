@@ -129,28 +129,27 @@ appWithHeadNodes headNodes createNetwork sessionStorage =
 
     withSessionId = singleParameter "sid"
 
-
--- TODO This can be better, cleaner
 mainPage :: [Node] -> Text -> Int -> [Node] -> Document
 mainPage headNodes sid snapshot inner =
-    Document 
-      (Prologue [] (Just (Doctype "html" Nothing)) [])
-      (Element "html" Map.empty 
-        [ NodeElement $ Element "head" Map.empty headNodes
-        , NodeElement $ Element "body" (Map.singleton "data-purescheme-ssd-sid" sid)
-          [ NodeElement $ Element "script" (Map.fromList [("type", "text/javascript"), ("src", jsDriverName)]) []
-          , NodeElement $ divSsdApp snapshot inner
-          ] ! bodyAndHtmlStyles
-        ]
-        ! bodyAndHtmlStyles
-      )
-      []
-
-divSsdApp :: Int -> [Node] -> Element
-divSsdApp snapshot inner =
-  Element "div" Map.empty inner 
-  ! attribute "id" "purescheme-ssd-main-app"
-  ! attribute "data-purescheme-ssd-snapshot" (T.pack $ show snapshot)
-  ! attribute "style" "display: flex; height: 100%"
-
-bodyAndHtmlStyles = attribute "style" "height: 100%;"
+  Document 
+    (Prologue [] (Just (Doctype "html" Nothing)) [])
+    (Element "html" (Map.singleton "style" "height: 100%;")
+      [ headElement
+      , bodyElement
+      ]
+    )
+    []
+  where
+    headElement = 
+      NodeElement $ Element "head" Map.empty 
+        (headNodes ++ 
+          [NodeElement $ Element "script" (Map.fromList [("type", "text/javascript"), ("src", jsDriverName)]) []])
+    bodyElement =
+      NodeElement $ Element "body" (bodyAttributes sid snapshot) inner
+    
+bodyAttributes sid snapshot = Map.fromList
+  [ ("id", "purescheme-ssd-main-app")
+  , ("data-purescheme-ssd-sid", sid)
+  , ("data-purescheme-ssd-snapshot", T.pack $ show snapshot)
+  , ("style", "display: flex; height: 100%;")
+  ]

@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: f99ea26dd2135ab019b8f821d234eede849ed8223ea959284383e32d46e9923d
+-- hash: e9eb0bb87872b55c73e81b43a024ed6d48a7108c59bc586780db1312ee2a757a
 
 name:           purescheme-ssd-reflex-forms
 version:        0.1.0.0
@@ -35,6 +35,7 @@ library
   exposed-modules:
       Reflex.SSDom.Forms
       Reflex.SSDom.Forms.Accordion
+      Reflex.SSDom.Forms.AppLayout
       Reflex.SSDom.Forms.Button
       Reflex.SSDom.Forms.Checkbox
       Reflex.SSDom.Forms.Common

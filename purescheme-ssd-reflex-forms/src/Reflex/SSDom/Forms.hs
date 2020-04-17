@@ -14,6 +14,7 @@
 -------------------------------------------------------------------------------
 module Reflex.SSDom.Forms 
 ( module Reflex.SSDom.Forms.Accordion
+, module Reflex.SSDom.Forms.AppLayout
 , module Reflex.SSDom.Forms.Common
 , module Reflex.SSDom.Forms.Button
 , module Reflex.SSDom.Forms.Checkbox
@@ -23,6 +24,7 @@ module Reflex.SSDom.Forms
 ) where
 
 import Reflex.SSDom.Forms.Accordion
+import Reflex.SSDom.Forms.AppLayout
 import Reflex.SSDom.Forms.Common
 import Reflex.SSDom.Forms.Button
 import Reflex.SSDom.Forms.Checkbox

@@ -1,8 +1,8 @@
   
 function handleReflexVaadinEvent(ev) {
   // TODO: serialize the calls so no parallel calls are made
-  const bodyElement = document.getElementsByTagName("BODY")[0]; 
-  const sid = bodyElement.attributes.getNamedItem("data-purescheme-ssd-sid").value;
+  const mainApplication = document.getElementById("purescheme-ssd-main-app");
+  const sid = mainApplication.attributes.getNamedItem("data-purescheme-ssd-sid").value;
   var deta;
   if (ev.type == "input") {
     deta = {value: ev.target.value};    
@@ -35,9 +35,8 @@ function initUI() {
 }
 
 function getEvents() {
-  const bodyElement = document.getElementsByTagName("BODY")[0]; 
-  const sid = bodyElement.attributes.getNamedItem("data-purescheme-ssd-sid").value;
   const mainApplication = document.getElementById("purescheme-ssd-main-app");
+  const sid = mainApplication.attributes.getNamedItem("data-purescheme-ssd-sid").value;
   const snapshot = mainApplication.attributes.getNamedItem("data-purescheme-ssd-snapshot").value;
   fetch(`/events?sid=${sid}&snapshot=${snapshot}`, {
     headers: {

@@ -3,6 +3,7 @@ module Reflex.SSDom.Basic
   ( span
   , small
   , div
+  , h5
   , constSimpleElement
   , jsScript
   , content
@@ -23,7 +24,10 @@ span :: SSDWidgetMonad t m => Dynamic t Text -> m ()
 span = tellNodes . fmap (pure . simpleNodeElement "span") 
 
 small :: SSDWidgetMonad t m => Dynamic t Text -> m ()
-small = tellNodes . fmap (pure . simpleNodeElement "small") 
+small = tellNodes . fmap (pure . simpleNodeElement "small")
+
+h5 :: SSDWidgetMonad t m => Dynamic t Text -> m ()
+h5 = tellNodes . fmap (pure . simpleNodeElement "h5")
 
 div :: SSDWidgetMonad t m => m a -> m a
 div inner = do

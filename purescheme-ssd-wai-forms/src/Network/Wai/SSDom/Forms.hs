@@ -56,6 +56,7 @@ formsApp title createNetwork sessionStorage =
 headNodes :: Text -> [Node]
 headNodes title = 
   [ NodeElement $ leafElement "meta" ! attribute "charset" "utf-8"
+  , NodeElement $ leafElement "meta" ! attribute "name" "viewport" ! attribute "content" "width=device-width, minimum-scale=1, initial-scale=1, viewport-fit=cover"
   , simpleNodeElement "title" title
   , NodeElement $ leafElement "script" ! attribute "src" jsVaadinName
   , simpleNodeElement "style" "body { font-family: var(--lumo-font-family); }"
