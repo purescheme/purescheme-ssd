@@ -36,11 +36,6 @@ import qualified Data.Text as T
 import Reflex
 import Text.XML 
 
-data Accordion t
-  = Accordion
-  { _accordion_opened :: Dynamic t Int
-  }
-
 data AccordionPanelConfig t
   = AccordionPanelConfig
   { _accordionPanelConfig_autofocus :: Dynamic t Bool
@@ -56,9 +51,6 @@ instance Reflex t => Default (AccordionPanelConfig t) where
     , _accordionPanelConfig_visible = constDyn True
     }
 
-newtype AccordionPanelResult = AccordionPanelResult [Node]
-
--- accordion :: (SSDWidgetMonad t m) => DynamicWriterT t AccordionPanelResult (ReaderT (SSDWidgetContext t) m') a -> m a
 -- TODO: Should we force only accordionPanels inside?
 accordion :: (SSDWidgetMonad t m) => m a -> m a
 accordion inner = do
@@ -71,7 +63,6 @@ accordion inner = do
   return result
 
 accordionPanel 
---   :: (Reflex t, MonadFix m, Monad m, DynamicWriter t AccordionPanelResult m, MonadReader (SSDWidgetContext t) m) 
   :: (SSDWidgetMonad t m)
   => AccordionPanelConfig t 
   -> m ()

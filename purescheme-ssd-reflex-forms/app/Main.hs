@@ -51,17 +51,26 @@ demoUI = do
 
 menu :: (SSDWidgetMonad t m) =>  m (Dynamic t (m ()))
 menu = 
-  accordion $ do
-    results <- sequence
-      [ accordionPanel def (span "Form Input") $ formInput
-      , accordionPanel def (span "Visualization") $ visualization
-      ]
-    holdDyn initialGui $ fmap demoLayout (leftmost results)
+  verticalLayout def{_orderedLayoutConfig_margin = constDyn True} $ 
+    accordion $ do
+      results <- sequence
+        [ accordionPanel def (span "Form Input") $ formInput
+        , accordionPanel def (span "Visualization") $ visualization
+        ]
+      holdDyn initialGui $ fmap demoLayout (leftmost results)
+
+
+menuButton :: (SSDWidgetMonad t m) => Text -> m (Button t)
+menuButton label = 
+  button def
+    { _buttonConfig_label = constDyn label
+    , _buttonConfig_type = constDyn ButtonTypeTertiaryInline
+    }
 
 formInput :: (SSDWidgetMonad t m) => m (Event t (m ()))
 formInput = do
   verticalLayout def $ do
-    textButton <- button def{_buttonConfig_label = "Text field"}
+    textButton <- menuButton "Text field"
     return $ leftmost
       [  _button_click textButton $> textGui
       ]
@@ -69,8 +78,8 @@ formInput = do
 visualization :: (SSDWidgetMonad t m) => m (Event t (m ()))
 visualization = do
   verticalLayout def $ do
-    iconButton <- button def{_buttonConfig_label = "Icon"}
-    tooltipButton <- button def{_buttonConfig_label = "Tooltip"}
+    iconButton <- menuButton "Icons"
+    tooltipButton <- menuButton "Tooltip"
     return $ leftmost 
       [ _button_click iconButton $> iconGui
       , _button_click tooltipButton $> tooltipGui
