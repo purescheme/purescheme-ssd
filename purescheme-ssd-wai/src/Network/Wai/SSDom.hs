@@ -151,5 +151,5 @@ bodyAttributes sid snapshot = Map.fromList
   [ ("id", "purescheme-ssd-main-app")
   , ("data-purescheme-ssd-sid", sid)
   , ("data-purescheme-ssd-snapshot", T.pack $ show snapshot)
-  , ("style", "display: flex; height: 100%;")
+  , ("style", "display: flex")
   ]

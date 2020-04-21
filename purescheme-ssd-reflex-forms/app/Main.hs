@@ -59,31 +59,36 @@ menu =
         ]
       holdDyn initialGui $ fmap demoLayout (leftmost results)
 
-
-menuButton :: (SSDWidgetMonad t m) => Text -> m (Button t)
-menuButton label = 
-  button def
-    { _buttonConfig_label = constDyn label
-    , _buttonConfig_type = constDyn ButtonTypeTertiaryInline
-    }
+menuButton :: (SSDWidgetMonad t m) => Text -> m () -> m (Event t (m ()))
+menuButton label ui = do
+  but <- buildButton
+  return $ _button_click but $> wrappedUi
+  where
+    buildButton = button def
+      { _buttonConfig_label = constDyn label
+      , _buttonConfig_type = constDyn ButtonTypeTertiaryInline
+      }
+    wrappedUi = verticalLayout def{_orderedLayoutConfig_margin = constDyn True,  _orderedLayoutConfig_style = constDyn [("flex-grow", "1")]} $ do
+      constSimpleElement "h2" label
+      ui
 
 formInput :: (SSDWidgetMonad t m) => m (Event t (m ()))
 formInput = do
   verticalLayout def $ do
-    textButton <- menuButton "Text field"
-    return $ leftmost
-      [  _button_click textButton $> textGui
+    results <- sequence
+      [ menuButton "Checkbox" checkboxGui
+      , menuButton "Text field" textGui
       ]
+    return $ leftmost results
 
 visualization :: (SSDWidgetMonad t m) => m (Event t (m ()))
 visualization = do
   verticalLayout def $ do
-    iconButton <- menuButton "Icons"
-    tooltipButton <- menuButton "Tooltip"
-    return $ leftmost 
-      [ _button_click iconButton $> iconGui
-      , _button_click tooltipButton $> tooltipGui
+    results <- sequence
+      [ menuButton "Icons" iconGui
+      , menuButton "Tooltip" tooltipGui
       ]
+    return $ leftmost results
 
 dataInput :: (SSDWidgetMonad t m) => m (Event t (m ()))
 dataInput = do
@@ -95,23 +100,36 @@ dataInput = do
             [ fmap (const textGui) $ _button_click textButton
             ]
 
+checkboxGui :: (SSDWidgetMonad t m) => m ()
+checkboxGui = do
+  constSimpleElement "h3" "Basic usage"
+  verticalLayout def{_orderedLayoutConfig_padding = constDyn True, _orderedLayoutConfig_style = vstyle} $ do
+    void $ checkbox def{_checkboxConfig_label = "Option"} True
+  where
+    vstyle = constDyn
+      [ ("box-shadow", "0 0 0 1px rgba(0, 0, 0, 0.1)")
+      , ("width", "100%")
+      ]
+
 textGui :: (SSDWidgetMonad t m) => m ()
 textGui = span "Text Gui"
 
 initialGui :: (SSDWidgetMonad t m) => m ()
-initialGui = demoLayout $ span "Initial Gui"
+initialGui = 
+  demoLayout 
+  $ verticalLayout def{_orderedLayoutConfig_margin = constDyn True} 
+  $ do
+    constSimpleElement "h2" "Choose an element in the left menu"
 
 iconGui :: (SSDWidgetMonad t m) => m ()
 iconGui = ironIcon "vaadin:vaadin-h"  
 
 demoLayout :: SSDWidgetMonad t m => m a -> m a
-demoLayout = horizontalLayout def{ _orderedLayoutConfig_style = constDyn centerAndGrowStyles }
+demoLayout = horizontalLayout def{ _orderedLayoutConfig_style = constDyn growStyles }
 
-centerAndGrowStyles :: [(Text, Text)]
-centerAndGrowStyles = 
+growStyles :: [(Text, Text)]
+growStyles = 
   [ ("flex-grow", "1")
-  , ("justify-content", "center")
-  , ("align-items", "center")
   , ("height", "100%")
   ]
 
